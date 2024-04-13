@@ -1,3 +1,5 @@
-org\example\disassembler\BasicTableTest.class
-org\example\disassembler\ComplexTableTest.class
-org\example\disassembler\ParserTest.class
+disassembler\ByteIteratorTest.class
+disassembler\ComplexTableTest.class
+disassembler\BasicTableTest.class
+disassembler\InstructionParserTest.class
+disassembler\ParserTest.class
