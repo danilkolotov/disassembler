@@ -1,6 +1,8 @@
 package disassembler.riscv;
 
 
+import disassembler.util.IntUtils;
+
 import java.util.List;
 
 import static disassembler.util.IntUtils.extract;
@@ -24,7 +26,11 @@ public final class SType extends Instruction {
 
     @Override
     protected Integer parseImmediate() {
-        return (extract(representation, 25, 32) << 5) + extract(representation, 7, 12) + extract(representation, 31, 32) * 0b11111_11111_11111_11111000_000_000_000;
+        return new IntUtils.BitBuilder()
+                .fill(0, 5, extract(representation, 7, 12))
+                .fill(5, 11, extract(representation, 25, 31))
+                .repeat(11, 32, extract(representation, 31))
+                .build();
     }
 
     @Override

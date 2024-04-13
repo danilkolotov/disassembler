@@ -1,5 +1,7 @@
 package disassembler.riscv;
 
+import disassembler.util.IntUtils;
+
 import java.util.List;
 
 import static disassembler.util.IntUtils.extract;
@@ -17,11 +19,13 @@ public final class JType extends Instruction {
 
     @Override
     protected Integer parseImmediate() {
-        int res = 0b11111111111100000000000000000000 * extract(representation, 31, 32);
-        res += extract(representation, 12, 20) << 12;
-        res += extract(representation, 20, 21) << 11;
-        res += extract(representation, 21, 31) << 1;
-        return res;
+        return new IntUtils.BitBuilder()
+                .place(0, 0)
+                .fill(1, 11, extract(representation, 21, 31))
+                .place(11, extract(representation, 20))
+                .fill(12, 20, extract(representation, 20, 21))
+                .repeat(20, 32, extract(representation, 31, 32))
+                .build();
     }
 
     @Override

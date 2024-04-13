@@ -1,5 +1,7 @@
 package disassembler.riscv;
 
+import disassembler.util.IntUtils;
+
 import java.util.List;
 
 import static disassembler.util.IntUtils.extract;
@@ -22,7 +24,11 @@ public final class UType extends Instruction {
 
     @Override
     protected Integer parseImmediate() {
-        return extract(representation, 12, 32) + 0b11111111111100000000000000000000 * extract(representation, 31, 32);
+            return new IntUtils.BitBuilder()
+                    .fill(0, 10, extract(representation, 12, 32))
+                    .repeat(20, 32, extract(representation, 31, 32))
+                    .build();
+            // wrong formula?? TODO: check spec
     }
 
     @Override

@@ -1,5 +1,7 @@
 package disassembler.riscv;
 
+import disassembler.util.IntUtils;
+
 import java.util.List;
 
 import static disassembler.util.IntUtils.extract;
@@ -63,9 +65,10 @@ public final class IType extends Instruction {
     }
 
     private int parseImmediateImpl(int code){
-        int res = 0b11111_11111_11111_11111000_000_000_000 * extract(code, 31, 32);
-        res += extract(code, 20, 32);
-        return res;
+        return new IntUtils.BitBuilder()
+                .fill(0, 12, extract(code, 20, 32))
+                .repeat(12, 32, extract(code, 31))
+                .build();
     }
 
     @Override

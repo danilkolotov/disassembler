@@ -20,6 +20,7 @@ public class IntUtils {
     public static int extract(int x, int start, int end) {
         return (mask(start, end) & x) >>> start;
     }
+
     public static int extract(int x, int start) {
         return extract(x, start, start + 1);
     }
@@ -28,6 +29,9 @@ public class IntUtils {
         int result;
 
         public BitBuilder fill(int start, int end, int x) {
+            System.err.println(x);
+            System.err.println(start);
+            System.err.println(end);
             result += (x % (1 << (end - start))) << start;
             return this;
         }
@@ -38,7 +42,7 @@ public class IntUtils {
 
         public BitBuilder repeat(int start, int end, int d) {
             d = d % 2;
-            return fill(start, end, d * mask(start, end));
+            return fill(start, end, d * mask(0, end - start));
         }
 
         public int build() {
