@@ -17,11 +17,11 @@ public class ParserTest {
     @Test
     public void testSamples() {
         int samplesNumber = 3;
-        for (int i = 3; i <= samplesNumber; i++) {
+        for (int i = 1; i <= samplesNumber; i++) {
             Path samplePath = resources.resolve(Paths.get(Integer.toString(i), "test.elf"));
             Path correctPath = resources.resolve(Paths.get(Integer.toString(i), "answer.txt"));
             try {
-                String toCheck = new Parser(Files.readAllBytes(samplePath)).parse();
+                String toCheck = new ELFParser(Files.readAllBytes(samplePath)).parse();
                 assertEquals(String.join("\n" , Files.readAllLines(correctPath)), toCheck.trim(), "Sample number " + i + " failed.");
             } catch (IOException e) {
                 throw new IllegalStateException("Can't read from test files, sample " + i, e);

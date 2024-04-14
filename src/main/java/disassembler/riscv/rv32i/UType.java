@@ -25,11 +25,14 @@ public final class UType extends Instruction {
 
     @Override
     protected Integer parseImmediate(int representation) {
-            return new IntUtils.BitBuilder()
-                    .place(0, 10, getBits(representation, 12, 32))
-                    .fill(20, 32, getBits(representation, 31, 32))
-                    .build();
-            // wrong formula?? TODO: check spec
+//            return new IntUtils.BitBuilder()
+//                    .place(0, 10, getBits(representation, 12, 32))
+//                    .fill(20, 32, getBits(representation, 31, 32))
+//                    .build();
+        return new IntUtils.BitBuilder()
+                .fill(0, 12, 0)
+                .place(12, 32, getBits(representation, 12, 32))
+                .build() >> 12;
     }
 
     @Override

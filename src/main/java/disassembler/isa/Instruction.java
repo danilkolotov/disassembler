@@ -20,9 +20,7 @@ public abstract class Instruction {
         this.jumpAddress = parseJumpAddress(representation);
     }
 
-    protected String parseName(int representation) {
-        return null;
-    }
+    protected abstract String parseName(int representation);
 
     protected Integer parseImmediate(int representation) {
         return null;

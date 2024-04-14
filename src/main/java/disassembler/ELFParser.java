@@ -3,7 +3,8 @@ package disassembler;
 import disassembler.elf.Table;
 import disassembler.elf.TableStructure;
 import disassembler.isa.Instruction;
-import disassembler.riscv.IParser;
+import disassembler.riscv.RISCParser;
+import disassembler.riscv.rv32i.IParser;
 import disassembler.util.ByteIterator;
 import disassembler.util.IntUtils;
 import disassembler.util.Pair;
@@ -81,7 +82,12 @@ public class ELFParser {
 
         Table<Integer> textHeader = sectionHeaderTable.get(sectionNames.indexOf(".text"));
 
-        List<Instruction> instructions = new IParser().parse(
+//        List<Instruction> instructions = new IParser().parse(
+//                new ByteIterator(bytes, textHeader.get("sh_offset"), textHeader.get("sh_size")),
+//                textHeader.get("sh_addr")
+//        );
+
+        List<Instruction> instructions = RISCParser.parse(
                 new ByteIterator(bytes, textHeader.get("sh_offset"), textHeader.get("sh_size")),
                 textHeader.get("sh_addr")
         );

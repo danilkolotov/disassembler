@@ -1,7 +1,8 @@
 package disassembler;
 
 import disassembler.elf.Table;
-import disassembler.riscv.*;
+import disassembler.isa.Instruction;
+import disassembler.riscv.rv32i.*;
 import disassembler.util.Pair;
 
 import java.util.HashMap;
@@ -15,21 +16,12 @@ public class Output {
     public static String output(List<Instruction> instructions, List<Pair<String, Table<Integer>>> symbols, Map<Integer, String> labels) {
         StringBuilder result = new StringBuilder();
 
-        result.append(".text\n\n\n");
+        result.append(".text\n");
         for (Instruction instruction : instructions) {
             if (labels.containsKey(instruction.getAddress())) {
                 result.append(String.format("\n%08x \t<%s>:\n", instruction.getAddress(), labels.get(instruction.getAddress())));
             }
-//            result.append(String.format("   %05x:\t%08x\t", instruction.getAddress(), instruction.getCode()));
-            String add = "";
-            if (instruction.getJumpAddress() != null) {
-                if (!instruction.getName().equals("jal")) {
-                    add = ", <" + labels.get(instruction.getJumpAddress()) + ">";
-                } else {
-                    add = " <" + labels.get(instruction.getJumpAddress()) + ">";
-                }
-            }
-            result.append(instructionToString(instruction)).append(add).append("\n");
+            result.append(instructionToString(instruction, labels)).append("\n");
         }
 
         result.append("\n\n.symtab\n\n");
@@ -37,25 +29,73 @@ public class Output {
         return result.toString();
     }
 
-    private static String instructionToString(Instruction instruction) {
+    private static String instructionToString(Instruction instruction, Map<Integer, String> labels) {
         String name = instruction.getName();
         List<String> registers = Optional.ofNullable(instruction.getRegisters()).map(l -> l.stream().map(Output::registerOutput).toList()).orElse(null);
         Integer immediate = instruction.getImmediate();
         int address = instruction.getAddress();
         int code = instruction.getCode();
 
+        List<String> load = List.of("lb", "lh", "lw", "lbu", "lhu", "jalr");
 
         return String.format("   %05x:\t%08x\t", address, code) + switch (instruction) {
-            case BType b -> "b";
-            case Invalid inv -> "invalid_instruction";
-            case IType i -> "i";
-            case JType j -> "j";
-            case RType r  -> "r";
-            case SType s -> "s";
-            case UType u -> "u";
-            case EType e -> "";
-            case Fence f ->
-                    String.format("%7s\t%s, %s", f.getName(), fenceOutput(f.getRegisters().get(0)), fenceOutput(f.getRegisters().get(1)));
+            case BType b -> String.format(
+                    "%7s\t%s, %s, 0x%x, <%s>",
+                    name,
+                    registers.get(0),
+                    registers.get(1),
+                    b.getJumpAddress(),
+                    labels.get(b.getJumpAddress())
+                );
+            case Invalid inv -> String.format("%-7s", "invalid_instruction");
+            case IType i -> (!load.contains(name) ? String.format(
+                    "%7s\t%s, %s, %s",
+                    name,
+                    registers.get(0),
+                    registers.get(1),
+                    immediate
+            ) : String.format(
+                    "%7s\t%s, %d(%s)",
+                    name,
+                    registers.get(0),
+                    immediate,
+                    registers.get(1)
+            ));
+            case JType j -> String.format(
+                    "%7s\t%s, 0x%x <%s>",
+                    name,
+                    registers.get(0),
+                    j.getJumpAddress(),
+                    labels.get(j.getJumpAddress())
+            );
+            case RType r  -> String.format(
+                    "%7s\t%s, %s, %s",
+                    name,
+                    registers.get(0),
+                    registers.get(1),
+                    registers.get(2)
+            );
+            case SType s -> String.format(
+                    "%7s\t%s, %d(%s)",
+                    name,
+                    registers.get(1),
+                    immediate,
+                    registers.get(0)
+            );
+            case UType u -> String.format(
+                    "%7s\t%s, 0x%s",
+                    name,
+                    registers.get(0),
+                    Integer.toHexString(u.getImmediate())
+            );
+            case EType e -> String.format("%7s", name);
+            case Fence f -> String.format(
+                    "%7s\t%s, %s",
+                    name,
+                    fenceOutput(f.getRegisters().get(0)),
+                    fenceOutput(f.getRegisters().get(1))
+            );
+            default -> throw new IllegalStateException("Unexpected value: " + instruction);
         };
     }
 
