@@ -1,10 +1,10 @@
-package disassembler.riscv;
+package disassembler.isa;
 
 import java.util.List;
 
 import static disassembler.util.IntUtils.LEToInt;
 
-public abstract sealed class Instruction permits BType, EType, Fence, IType, Invalid, JType, RType, SType, UType {
+public abstract class Instruction {
     protected int representation, address;
     protected String name;
     protected Integer immediate;
@@ -14,19 +14,27 @@ public abstract sealed class Instruction permits BType, EType, Fence, IType, Inv
     public Instruction(List<Byte> bytes, int address) {
         this.representation = LEToInt(bytes);
         this.address = address;
-        this.name = parseName();
-        this.immediate = parseImmediate();
-        this.registers = parseRegisters();
-        this.jumpAddress = parseJumpAddress();
+        this.name = parseName(representation);
+        this.immediate = parseImmediate(representation);
+        this.registers = parseRegisters(representation);
+        this.jumpAddress = parseJumpAddress(representation);
     }
 
-    protected abstract String parseName();
+    protected String parseName(int representation) {
+        return null;
+    }
 
-    protected abstract Integer parseImmediate();
+    protected Integer parseImmediate(int representation) {
+        return null;
+    }
 
-    protected abstract Integer parseJumpAddress();
+    protected Integer parseJumpAddress(int representation) {
+        return null;
+    }
 
-    protected abstract List<Integer> parseRegisters();
+    protected List<Integer> parseRegisters(int representation) {
+        return List.of();
+    }
 
     public final String getName() {
         return name;

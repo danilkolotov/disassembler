@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 import disassembler.isa.Instruction;
 
@@ -12,20 +12,5 @@ public final class EType extends Instruction {
     @Override
     protected String parseName(int representation) {
         return "ecall";
-    }
-
-    @Override
-    protected Integer parseImmediate(int representation) {
-        return null;
-    }
-
-    @Override
-    protected Integer parseJumpAddress(int representation) {
-        return null;
-    }
-
-    @Override
-    protected List<Integer> parseRegisters(int representation) {
-        return null;
     }
 }

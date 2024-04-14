@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 
 import disassembler.isa.Instruction;
@@ -33,12 +33,6 @@ public final class SType extends Instruction {
                 .fill(11, 32, getBits(representation, 31))
                 .build();
     }
-
-    @Override
-    protected Integer parseJumpAddress(int representation) {
-        return null;
-    }
-
     @Override
     protected List<Integer> parseRegisters(int representation) {
         return List.of(getBits(representation, 15, 20), getBits(representation, 20, 25));

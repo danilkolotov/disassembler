@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
@@ -22,10 +22,10 @@ public final class JType extends Instruction {
     protected Integer parseImmediate(int representation) {
         return new IntUtils.BitBuilder()
                 .place(0, 0)
-                .place(1, 11, IntUtils.getBits(this.representation, 21, 31))
-                .place(11, getBits(this.representation, 20))
-                .place(12, 20, IntUtils.getBits(this.representation, 12, 20))
-                .fill(20, 32, IntUtils.getBits(this.representation, 31, 32))
+                .place(1, 11, getBits(representation, 21, 31))
+                .place(11, getBits(representation, 20))
+                .place(12, 20, getBits(representation, 12, 20))
+                .fill(20, 32, getBits(representation, 31, 32))
                 .build() + address;
     }
 
@@ -36,6 +36,6 @@ public final class JType extends Instruction {
 
     @Override
     protected List<Integer> parseRegisters(int representation) {
-        return List.of(IntUtils.getBits(this.representation, 7, 12));
+        return List.of(getBits(representation, 7, 12));
     }
 }

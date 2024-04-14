@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
@@ -30,11 +30,6 @@ public final class UType extends Instruction {
                     .fill(20, 32, getBits(representation, 31, 32))
                     .build();
             // wrong formula?? TODO: check spec
-    }
-
-    @Override
-    protected Integer parseJumpAddress(int representation) {
-        return null;
     }
 
     @Override

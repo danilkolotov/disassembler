@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;

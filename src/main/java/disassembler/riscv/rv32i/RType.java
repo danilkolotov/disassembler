@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
@@ -7,7 +7,7 @@ import java.util.List;
 
 import static disassembler.util.IntUtils.getBits;
 
-public final class RType extends Instruction {
+public class RType extends Instruction {
 
     public RType(List<Byte> representation, int address) {
         super(representation, address);
@@ -37,17 +37,6 @@ public final class RType extends Instruction {
             default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
         };
     }
-
-    @Override
-    protected Integer parseImmediate(int representation) {
-        return null;
-    }
-
-    @Override
-    protected Integer parseJumpAddress(int representation) {
-        return null;
-    }
-
     @Override
     protected List<Integer> parseRegisters(int representation) {
         return List.of(

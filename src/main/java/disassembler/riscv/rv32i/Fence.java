@@ -1,4 +1,4 @@
-package disassembler.riscv;
+package disassembler.riscv.rv32i;
 
 import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
@@ -15,16 +15,6 @@ public final class Fence extends Instruction {
     @Override
     protected String parseName(int representation) {
         return "fence";
-    }
-
-    @Override
-    protected Integer parseImmediate(int representation) {
-        return null;
-    }
-
-    @Override
-    protected Integer parseJumpAddress(int representation) {
-        return null;
     }
 
     @Override
