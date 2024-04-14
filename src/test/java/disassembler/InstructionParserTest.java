@@ -51,15 +51,15 @@ public class InstructionParserTest {
 
     @Test
     public void jTypeTest() {
-        int code = 0x0000006f;
-        int address = 0x105a0;
+        int code = 0xfddff0ef;
+        int address = 0x10098;
         Instruction parsed = parse(code, address);
         assertEquals(address, parsed.getAddress());
         assertEquals(code, parsed.getCode());
         assertEquals("jal", parsed.getName());
-        assertIterableEquals(List.of(0), parsed.getRegisters());
-        assertEquals(0, parsed.getImmediate());
-        assertEquals(null, parsed.getJumpAddress());
+        assertIterableEquals(List.of(1), parsed.getRegisters());
+        assertEquals(0x10074, parsed.getImmediate());
+        assertEquals(0x10074, parsed.getJumpAddress());
     }
 
     @Test
