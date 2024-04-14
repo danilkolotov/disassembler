@@ -4,7 +4,7 @@ import disassembler.util.IntUtils;
 
 import java.util.List;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public final class UType extends Instruction {
 
@@ -14,7 +14,7 @@ public final class UType extends Instruction {
 
     @Override
     protected String parseName() {
-        int opcode = extract(representation, 0, 7);
+        int opcode = IntUtils.getBits(representation, 0, 7);
         return switch (opcode) {
             case 0b0110111 -> "lui";
             case 0b0010111 -> "auipc";
@@ -25,8 +25,8 @@ public final class UType extends Instruction {
     @Override
     protected Integer parseImmediate() {
             return new IntUtils.BitBuilder()
-                    .fill(0, 10, extract(representation, 12, 32))
-                    .repeat(20, 32, extract(representation, 31, 32))
+                    .place(0, 10, IntUtils.getBits(representation, 12, 32))
+                    .fill(20, 32, IntUtils.getBits(representation, 31, 32))
                     .build();
             // wrong formula?? TODO: check spec
     }
@@ -38,6 +38,6 @@ public final class UType extends Instruction {
 
     @Override
     protected List<Integer> parseRegisters() {
-        return List.of(extract(representation, 7, 12));
+        return List.of(IntUtils.getBits(representation, 7, 12));
     }
 }

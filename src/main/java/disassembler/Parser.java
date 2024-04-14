@@ -6,6 +6,7 @@ import disassembler.riscv.Instruction;
 import disassembler.riscv.InstructionParser;
 import disassembler.util.ByteIterator;
 import disassembler.util.IntUtils;
+import disassembler.util.Pair;
 
 import java.util.*;
 import java.util.function.Function;
@@ -93,7 +94,6 @@ public class Parser {
         }
 
         int labelCount = 0;
-        System.err.println(addressToName);
         for (Instruction instruction : instructions) {
             Integer jump = instruction.getJumpAddress();
             if (jump != null && !addressToName.containsKey(jump)) {
@@ -121,7 +121,14 @@ public class Parser {
 
         result.append("\n\n.symtab\n\n");
         result.append(temporary(symbolTable));
-        return result.toString();
+//        return result.toString();
+
+        List<Pair<String, Table<Integer>>> symbols = new ArrayList<>();
+        for (Table<Integer> symbol : symbolTable) {
+            symbols.add(new Pair<>(getName(symbol.get("st_name")), symbol));
+        }
+
+        return Output.output(instructions, symbols, addressToName);
     }
 
     private String temporary(Table<Table<Integer>> table) {

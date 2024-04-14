@@ -17,29 +17,28 @@ public class IntUtils {
         return mask;
     }
 
-    public static int extract(int x, int start, int end) {
+    public static int getBits(int x, int start, int end) {
         return (mask(start, end) & x) >>> start;
     }
 
-    public static int extract(int x, int start) {
-        return extract(x, start, start + 1);
+    public static int getBits(int x, int start) {
+        return getBits(x, start, start + 1);
     }
 
     public static class BitBuilder {
         int result;
 
-        public BitBuilder fill(int start, int end, int x) {
+        public BitBuilder place(int start, int end, int x) {
             result += (x % (1 << (end - start))) << start;
             return this;
         }
 
         public BitBuilder place(int index, int x) {
-            return fill(index, index + 1, x);
+            return place(index, index + 1, x);
         }
 
-        public BitBuilder repeat(int start, int end, int d) {
-            d = d % 2;
-            return fill(start, end, d * mask(0, end - start));
+        public BitBuilder fill(int start, int end, int d) {
+            return place(start, end, (d % 2) * mask(0, end - start));
         }
 
         public int build() {

@@ -1,8 +1,10 @@
 package disassembler.riscv;
 
+import disassembler.util.IntUtils;
+
 import java.util.List;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public final class RType extends Instruction {
 
@@ -12,8 +14,8 @@ public final class RType extends Instruction {
 
     @Override
     protected String parseName() {
-        int funct3 = extract(representation, 12, 15);
-        int funct7 = extract(representation, 25, 32);
+        int funct3 = IntUtils.getBits(representation, 12, 15);
+        int funct7 = IntUtils.getBits(representation, 25, 32);
         return switch (funct3) {
             case 0b000 -> switch (funct7) {
                 case 0b0000000 -> "add";
@@ -48,9 +50,9 @@ public final class RType extends Instruction {
     @Override
     protected List<Integer> parseRegisters() {
         return List.of(
-            extract(representation, 7, 12),
-            extract(representation, 15, 20),
-            extract(representation, 20, 25)
+            IntUtils.getBits(representation, 7, 12),
+            IntUtils.getBits(representation, 15, 20),
+            IntUtils.getBits(representation, 20, 25)
         );
     }
 }

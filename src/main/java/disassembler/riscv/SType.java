@@ -5,7 +5,7 @@ import disassembler.util.IntUtils;
 
 import java.util.List;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public final class SType extends Instruction {
 
@@ -15,7 +15,7 @@ public final class SType extends Instruction {
 
     @Override
     protected String parseName() {
-        int funct3 = extract(representation, 12, 15);
+        int funct3 = IntUtils.getBits(representation, 12, 15);
         return switch (funct3) {
             case 0b000 -> "sb";
             case 0b001 -> "sh";
@@ -27,9 +27,9 @@ public final class SType extends Instruction {
     @Override
     protected Integer parseImmediate() {
         return new IntUtils.BitBuilder()
-                .fill(0, 5, extract(representation, 7, 12))
-                .fill(5, 11, extract(representation, 25, 31))
-                .repeat(11, 32, extract(representation, 31))
+                .place(0, 5, IntUtils.getBits(representation, 7, 12))
+                .place(5, 11, IntUtils.getBits(representation, 25, 31))
+                .fill(11, 32, getBits(representation, 31))
                 .build();
     }
 
@@ -40,6 +40,6 @@ public final class SType extends Instruction {
 
     @Override
     protected List<Integer> parseRegisters() {
-        return List.of(extract(representation, 15, 20), extract(representation, 20, 25));
+        return List.of(IntUtils.getBits(representation, 15, 20), IntUtils.getBits(representation, 20, 25));
     }
 }

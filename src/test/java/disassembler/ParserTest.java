@@ -1,17 +1,13 @@
 package disassembler;
 
-import disassembler.riscv.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTest {

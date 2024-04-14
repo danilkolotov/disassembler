@@ -2,12 +2,13 @@ package disassembler;
 
 import disassembler.riscv.*;
 import disassembler.util.ByteIterator;
+import disassembler.util.IntUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 import static org.junit.jupiter.api.Assertions.*;
 
 // only one test for each instruction
@@ -16,7 +17,7 @@ public class InstructionParserTest {
     private Instruction parse(int code, int address) {
         List<Byte> bytes = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            bytes.add((byte) extract(code, i * 8, i * 8 + 8));
+            bytes.add((byte) IntUtils.getBits(code, i * 8, i * 8 + 8));
         }
         return InstructionParser.parse(new ByteIterator(bytes, 0), address).get(0);
     }

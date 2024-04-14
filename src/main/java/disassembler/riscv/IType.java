@@ -4,7 +4,7 @@ import disassembler.util.IntUtils;
 
 import java.util.List;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public final class IType extends Instruction {
 
@@ -14,9 +14,9 @@ public final class IType extends Instruction {
 
     @Override
     protected String parseName() {
-        int opcode = extract(representation, 0, 7);
-        int funct3 = extract(representation, 12, 15);
-        int funct7 = extract(representation, 25, 32);
+        int opcode = IntUtils.getBits(representation, 0, 7);
+        int funct3 = IntUtils.getBits(representation, 12, 15);
+        int funct7 = IntUtils.getBits(representation, 25, 32);
         if (opcode == 0b0010011) {
             return switch (funct3) {
                 case 0b000 -> "addi";
@@ -54,20 +54,20 @@ public final class IType extends Instruction {
 
     @Override
     protected Integer parseImmediate() {
-        int funct3 = extract(representation, 12, 15);
+        int funct3 = IntUtils.getBits(representation, 12, 15);
         if (funct3 == 0b101) {
-            return extract(representation, 20, 25);
+            return IntUtils.getBits(representation, 20, 25);
         }
         if (funct3 == 0b001) {
-            return parseImmediateImpl(representation << extract(parseImmediateImpl(representation), 20, 25));
+            return parseImmediateImpl(representation << IntUtils.getBits(parseImmediateImpl(representation), 20, 25));
         }
         return parseImmediateImpl(representation);
     }
 
     private int parseImmediateImpl(int code){
         return new IntUtils.BitBuilder()
-                .fill(0, 12, extract(code, 20, 32))
-                .repeat(12, 32, extract(code, 31))
+                .place(0, 12, IntUtils.getBits(code, 20, 32))
+                .fill(12, 32, getBits(code, 31))
                 .build();
     }
 
@@ -78,7 +78,7 @@ public final class IType extends Instruction {
 
     @Override
     protected List<Integer> parseRegisters() {
-        return List.of(extract(representation, 7, 12), extract(representation, 15, 20));
+        return List.of(IntUtils.getBits(representation, 7, 12), IntUtils.getBits(representation, 15, 20));
     }
 
 }

@@ -1,12 +1,13 @@
 package disassembler.riscv;
 
 import disassembler.util.ByteIterator;
+import disassembler.util.IntUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static disassembler.util.IntUtils.LEToInt;
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public class InstructionParser {
     public static List<Instruction> parse(ByteIterator iterator, int address) {
@@ -14,7 +15,7 @@ public class InstructionParser {
         while (iterator.hasNext(4)) {
             List<Byte> current = iterator.next(4);
             int code = LEToInt(current);
-            int opcode = extract(code, 0, 7);
+            int opcode = IntUtils.getBits(code, 0, 7);
             try {
                 result.add(switch (opcode) {
                     case 0b0110011 -> new RType(current, address);

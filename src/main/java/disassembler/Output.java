@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public class Output {
     public static String output(List<Instruction> instructions, List<Pair<String, Table<Integer>>> symbols, Map<Integer, String> labels) {
@@ -122,10 +122,10 @@ public class Output {
 
     private static String fenceOutput(int i) {
         StringBuilder res = new StringBuilder();
-        if (extract(i, 0) == 1) res.append("i");
-        if (extract(i, 1) == 1) res.append("o");
-        if (extract(i, 2) == 1) res.append("r");
-        if (extract(i, 3) == 1) res.append("w");
+        if (getBits(i, 0) == 1) res.append("i");
+        if (getBits(i, 1) == 1) res.append("o");
+        if (getBits(i, 2) == 1) res.append("r");
+        if (getBits(i, 3) == 1) res.append("w");
         return res.toString();
     }
 

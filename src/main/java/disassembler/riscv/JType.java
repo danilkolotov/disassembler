@@ -4,7 +4,7 @@ import disassembler.util.IntUtils;
 
 import java.util.List;
 
-import static disassembler.util.IntUtils.extract;
+import static disassembler.util.IntUtils.getBits;
 
 public final class JType extends Instruction {
 
@@ -21,10 +21,10 @@ public final class JType extends Instruction {
     protected Integer parseImmediate() {
         return new IntUtils.BitBuilder()
                 .place(0, 0)
-                .fill(1, 11, extract(representation, 21, 31))
-                .place(11, extract(representation, 20))
-                .fill(12, 20, extract(representation, 12, 20))
-                .repeat(20, 32, extract(representation, 31, 32))
+                .place(1, 11, IntUtils.getBits(representation, 21, 31))
+                .place(11, getBits(representation, 20))
+                .place(12, 20, IntUtils.getBits(representation, 12, 20))
+                .fill(20, 32, IntUtils.getBits(representation, 31, 32))
                 .build() + address;
     }
 
@@ -35,6 +35,6 @@ public final class JType extends Instruction {
 
     @Override
     protected List<Integer> parseRegisters() {
-        return List.of(extract(representation, 7, 12));
+        return List.of(IntUtils.getBits(representation, 7, 12));
     }
 }
