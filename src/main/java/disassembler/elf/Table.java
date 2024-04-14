@@ -39,6 +39,10 @@ public class Table<Entry> implements Iterable<Entry> {
         return fields.size();
     }
 
+    public List<Entry> toList() {
+        return fields;
+    }
+
     @Override
     public Iterator<Entry> iterator() {
         return fields.listIterator();
