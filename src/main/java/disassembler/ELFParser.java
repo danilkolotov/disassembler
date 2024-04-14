@@ -3,19 +3,19 @@ package disassembler;
 import disassembler.elf.Table;
 import disassembler.elf.TableStructure;
 import disassembler.isa.Instruction;
-import disassembler.riscv.IntegerParser;
+import disassembler.riscv.IParser;
 import disassembler.util.ByteIterator;
 import disassembler.util.IntUtils;
 import disassembler.util.Pair;
 
 import java.util.*;
 
-public class Parser {
+public class ELFParser {
     private byte[] bytes;
 
     private int nameOffset;
 
-    public Parser(byte[] bytes) {
+    public ELFParser(byte[] bytes) {
         this.bytes = bytes;
     }
 
@@ -81,7 +81,7 @@ public class Parser {
 
         Table<Integer> textHeader = sectionHeaderTable.get(sectionNames.indexOf(".text"));
 
-        List<Instruction> instructions = IntegerParser.parse(
+        List<Instruction> instructions = new IParser().parse(
                 new ByteIterator(bytes, textHeader.get("sh_offset"), textHeader.get("sh_size")),
                 textHeader.get("sh_addr")
         );
