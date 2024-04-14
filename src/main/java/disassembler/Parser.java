@@ -23,7 +23,8 @@ public class Parser {
         this.bytes = bytes;
     }
 
-    public String parse(Function<Instruction, String> outputStrategy) {
+//    public String parse(Function<Instruction, String> outputStrategy) {
+    public String parse() {
         StringBuilder result = new StringBuilder();
 
         header = new TableStructure<>(IntUtils::LEToInt)
@@ -92,11 +93,11 @@ public class Parser {
         }
 
         int labelCount = 0;
-
+        System.err.println(addressToName);
         for (Instruction instruction : instructions) {
-            if (/*instruction.label &&*/ !addressToName.containsKey(instruction.getJumpAddress())) {
-                addressToName.put(instruction.getJumpAddress(), "L" + labelCount);
-                labelCount++;
+            Integer jump = instruction.getJumpAddress();
+            if (jump != null && !addressToName.containsKey(jump)) {
+                addressToName.put(jump, "L" + labelCount++);
             }
         }
 
@@ -105,7 +106,7 @@ public class Parser {
             if (addressToName.containsKey(instruction.getAddress())) {
                 result.append(String.format("\n%08x \t<%s>:\n", instruction.getAddress(), addressToName.get(instruction.getAddress())));
             }
-            result.append(String.format("   %05x:\t%08x\t", instruction.getAddress(), instruction.getCode()));
+//            result.append(String.format("   %05x:\t%08x\t", instruction.getAddress(), instruction.getCode()));
             String add = "";
             if (instruction.getJumpAddress() != null) {
                 if (!instruction.getName().equals("jal")) {
@@ -114,7 +115,8 @@ public class Parser {
                     add = " <" + addressToName.get(instruction.getJumpAddress()) + ">";
                 }
             }
-            result.append(outputStrategy.apply(instruction)).append(add).append("\n");
+//            result.append(outputStrategy.apply(instruction)).append(add).append("\n");
+                result.append(instruction).append(add).append("\n");
         }
 
         result.append("\n\n.symtab\n\n");
