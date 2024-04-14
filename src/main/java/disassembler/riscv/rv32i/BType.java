@@ -1,5 +1,6 @@
 package disassembler.riscv;
 
+import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
 
 import java.util.List;
@@ -12,8 +13,8 @@ public final class BType extends Instruction {
     }
 
     @Override
-    protected String parseName() {
-        int funct3 = IntUtils.getBits(representation, 12, 15);
+    protected String parseName(int representation) {
+        int funct3 = IntUtils.getBits(this.representation, 12, 15);
         return switch (funct3) {
             case 0b000 -> "beq";
             case 0b001 -> "bne";
@@ -26,7 +27,7 @@ public final class BType extends Instruction {
     }
 
     @Override
-    protected Integer parseImmediate() {
+    protected Integer parseImmediate(int representation) {
         return new IntUtils.BitBuilder()
                 .place(0, 0)
                 .place(1, 5, IntUtils.getBits(representation, 8, 12))
@@ -37,13 +38,13 @@ public final class BType extends Instruction {
     }
 
     @Override
-    protected Integer parseJumpAddress() {
-        return parseImmediate() + address;
+    protected Integer parseJumpAddress(int representation) {
+        return parseImmediate(representation) + address;
     }
 
     @Override
-    protected List<Integer> parseRegisters() {
-        return List.of(IntUtils.getBits(representation, 15, 20), IntUtils.getBits(representation, 20, 25));
+    protected List<Integer> parseRegisters(int representation) {
+        return List.of(getBits(representation, 15, 20), getBits(representation, 20, 25));
     }
 
 

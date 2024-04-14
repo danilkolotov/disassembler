@@ -1,5 +1,6 @@
 package disassembler.riscv;
 
+import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public final class IType extends Instruction {
     }
 
     @Override
-    protected String parseName() {
+    protected String parseName(int representation) {
         int opcode = IntUtils.getBits(representation, 0, 7);
         int funct3 = IntUtils.getBits(representation, 12, 15);
         int funct7 = IntUtils.getBits(representation, 25, 32);
@@ -53,13 +54,13 @@ public final class IType extends Instruction {
     }
 
     @Override
-    protected Integer parseImmediate() {
-        int funct3 = IntUtils.getBits(representation, 12, 15);
+    protected Integer parseImmediate(int representation) {
+        int funct3 = getBits(representation, 12, 15);
         if (funct3 == 0b101) {
-            return IntUtils.getBits(representation, 20, 25);
+            return getBits(representation, 20, 25);
         }
         if (funct3 == 0b001) {
-            return parseImmediateImpl(representation << IntUtils.getBits(parseImmediateImpl(representation), 20, 25));
+            return parseImmediateImpl(representation << getBits(parseImmediateImpl(representation), 20, 25));
         }
         return parseImmediateImpl(representation);
     }
@@ -72,12 +73,12 @@ public final class IType extends Instruction {
     }
 
     @Override
-    protected Integer parseJumpAddress() {
+    protected Integer parseJumpAddress(int representation) {
         return null;
     }
 
     @Override
-    protected List<Integer> parseRegisters() {
+    protected List<Integer> parseRegisters(int representation) {
         return List.of(IntUtils.getBits(representation, 7, 12), IntUtils.getBits(representation, 15, 20));
     }
 

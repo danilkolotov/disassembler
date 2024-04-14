@@ -1,5 +1,7 @@
 package disassembler.riscv;
 
+import disassembler.isa.Instruction;
+
 import java.util.List;
 
 public final class Invalid extends Instruction {
@@ -8,22 +10,22 @@ public final class Invalid extends Instruction {
     }
 
     @Override
-    protected String parseName() {
+    protected String parseName(int representation) {
         return null;
     }
 
     @Override
-    protected Integer parseImmediate() {
+    protected Integer parseImmediate(int representation) {
         return null;
     }
 
     @Override
-    protected Integer parseJumpAddress() {
+    protected Integer parseJumpAddress(int representation) {
         return null;
     }
 
     @Override
-    protected List<Integer> parseRegisters() {
+    protected List<Integer> parseRegisters(int representation) {
         return null;
     }
 }

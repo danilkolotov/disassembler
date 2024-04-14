@@ -1,5 +1,6 @@
 package disassembler.riscv;
 
+import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
 
 import java.util.List;
@@ -12,22 +13,22 @@ public final class Fence extends Instruction {
     }
 
     @Override
-    protected String parseName() {
+    protected String parseName(int representation) {
         return "fence";
     }
 
     @Override
-    protected Integer parseImmediate() {
+    protected Integer parseImmediate(int representation) {
         return null;
     }
 
     @Override
-    protected Integer parseJumpAddress() {
+    protected Integer parseJumpAddress(int representation) {
         return null;
     }
 
     @Override
-    protected List<Integer> parseRegisters() {
-        return List.of(IntUtils.getBits(representation, 24, 28), IntUtils.getBits(representation, 24, 28));
+    protected List<Integer> parseRegisters(int representation) {
+        return List.of(getBits(representation, 24, 28), getBits(representation, 24, 28));
     }
 }

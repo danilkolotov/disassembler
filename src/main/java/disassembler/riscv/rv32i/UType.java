@@ -1,5 +1,6 @@
 package disassembler.riscv;
 
+import disassembler.isa.Instruction;
 import disassembler.util.IntUtils;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public final class UType extends Instruction {
     }
 
     @Override
-    protected String parseName() {
+    protected String parseName(int representation) {
         int opcode = IntUtils.getBits(representation, 0, 7);
         return switch (opcode) {
             case 0b0110111 -> "lui";
@@ -23,21 +24,21 @@ public final class UType extends Instruction {
     }
 
     @Override
-    protected Integer parseImmediate() {
+    protected Integer parseImmediate(int representation) {
             return new IntUtils.BitBuilder()
-                    .place(0, 10, IntUtils.getBits(representation, 12, 32))
-                    .fill(20, 32, IntUtils.getBits(representation, 31, 32))
+                    .place(0, 10, getBits(representation, 12, 32))
+                    .fill(20, 32, getBits(representation, 31, 32))
                     .build();
             // wrong formula?? TODO: check spec
     }
 
     @Override
-    protected Integer parseJumpAddress() {
+    protected Integer parseJumpAddress(int representation) {
         return null;
     }
 
     @Override
-    protected List<Integer> parseRegisters() {
-        return List.of(IntUtils.getBits(representation, 7, 12));
+    protected List<Integer> parseRegisters(int representation) {
+        return List.of(getBits(representation, 7, 12));
     }
 }
