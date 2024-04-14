@@ -4,7 +4,7 @@ import java.util.List;
 
 import static disassembler.util.IntUtils.LEToInt;
 
-public abstract sealed class Instruction permits BType, IType, Invalid, JType, RType, SType, UType {
+public abstract sealed class Instruction permits BType, EType, Fence, IType, Invalid, JType, RType, SType, UType {
     protected int representation, address;
     protected String name;
     protected Integer immediate;
