@@ -29,9 +29,6 @@ public class IntUtils {
         int result;
 
         public BitBuilder fill(int start, int end, int x) {
-            System.err.println(x);
-            System.err.println(start);
-            System.err.println(end);
             result += (x % (1 << (end - start))) << start;
             return this;
         }
