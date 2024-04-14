@@ -3,6 +3,7 @@ package disassembler.riscv;
 import disassembler.util.IntUtils;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static disassembler.util.IntUtils.extract;
 
@@ -30,7 +31,7 @@ public final class BType extends Instruction {
         return new IntUtils.BitBuilder()
                 .place(0, 0)
                 .fill(1, 5, extract(representation, 8, 12))
-                .fill(5, 11, extract(25, 31))
+                .fill(5, 11, extract(representation, 25, 31))
                 .place(11, extract(representation, 7))
                 .repeat(12, 32, extract(representation, 31))
                 .build();

@@ -23,14 +23,14 @@ public final class JType extends Instruction {
                 .place(0, 0)
                 .fill(1, 11, extract(representation, 21, 31))
                 .place(11, extract(representation, 20))
-                .fill(12, 20, extract(representation, 20, 21))
+                .fill(12, 20, extract(representation, 12, 20))
                 .repeat(20, 32, extract(representation, 31, 32))
-                .build();
+                .build() + address;
     }
 
     @Override
     protected Integer parseJumpAddress() {
-        return null;
+        return parseImmediate();
     }
 
     @Override
