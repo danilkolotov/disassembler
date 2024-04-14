@@ -1,8 +1,8 @@
-package disassembler;
+package disassembler.riscv;
 
 import disassembler.isa.Instruction;
 import disassembler.isa.InstructionParser;
-import disassembler.riscv.*;
+import disassembler.riscv.rv32i.*;
 import disassembler.util.ByteIterator;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 import static disassembler.util.IntUtils.LEToInt;
 import static disassembler.util.IntUtils.getBits;
 
-public class IntegerParser implements InstructionParser {
+public class RV32IParser implements InstructionParser {
     public List<Instruction> parse(ByteIterator iterator, int address) {
         List<Instruction> result = new ArrayList<>();
         while (iterator.hasNext(4)) {
