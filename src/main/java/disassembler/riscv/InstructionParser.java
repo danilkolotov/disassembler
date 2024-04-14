@@ -18,13 +18,13 @@ public class InstructionParser {
             try {
                 result.add(switch (opcode) {
                     case 0b0110011 -> new RType(current, address);
-                    case 0b0010011, 0b0000011, 0b1100111, 0b1110011 -> new IType(current, address);
+                    case 0b0010011, 0b0000011, 0b1100111 -> new IType(current, address);
                     case 0b0100011 -> new SType(current, address);
                     case 0b1100011 -> new BType(current, address);
                     case 0b1101111 -> new JType(current, address);
                     case 0b0110111, 0b0010111 -> new UType(current, address);
-                    //                case 0b0001111 -> new Fence(current, address);
-//                    case 0b1110011 -> new EType(current, address);
+                    case 0b0001111 -> new Fence(current, address);
+                    case 0b1110011 -> new EType(current, address);
                     default -> new Invalid(current, address);
                 });
             } catch (IllegalArgumentException e) {
