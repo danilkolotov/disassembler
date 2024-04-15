@@ -7,12 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static disassembler.util.IntUtils.getBits;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTest {
     private static final Path resources = Paths.get("src", "test", "resources");
-
 
     @Test
     public void testSamples() {

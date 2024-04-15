@@ -1,6 +1,7 @@
 package disassembler.isa;
 
 import java.util.List;
+import java.util.Optional;
 
 import static disassembler.util.IntUtils.LEToInt;
 
@@ -31,7 +32,7 @@ public abstract class Instruction {
     }
 
     protected List<Integer> parseRegisters(int representation) {
-        return List.of();
+        return null;
     }
 
     public final String getName() {
@@ -39,15 +40,15 @@ public abstract class Instruction {
     }
 
     public final List<Integer> getRegisters() {
-        return registers;
+        return check(registers, "registers");
     }
 
     public final Integer getImmediate() {
-        return immediate;
+        return check(immediate, "immediate");
     }
 
     public final Integer getJumpAddress() {
-        return jumpAddress;
+        return check(jumpAddress, "jump address");
     }
 
     public final int getAddress() {
@@ -56,5 +57,12 @@ public abstract class Instruction {
 
     public final int getCode() {
         return representation;
+    }
+
+    private <T> T check(T field, String fieldName) {
+        if (field == null) {
+            throw new UnsupportedOperationException("Can't get " + fieldName + " from instruction " + name);
+        }
+        return field;
     }
 }

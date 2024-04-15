@@ -3,8 +3,6 @@ package disassembler;
 import disassembler.isa.Instruction;
 import disassembler.riscv.rv32i.IParser;
 import disassembler.riscv.rv32i.BType;
-import disassembler.riscv.rv32i.Invalid;
-import disassembler.util.ByteIterator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,10 +11,8 @@ import java.util.List;
 import static disassembler.util.IntUtils.getBits;
 import static org.junit.jupiter.api.Assertions.*;
 
-// only one test for each instruction type
-// more tests in ParserTest
 public class InstructionParserTest {
-    private Instruction parse(int code, int address) {
+    private static Instruction parse(int code, int address) {
         List<Byte> bytes = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             bytes.add((byte) getBits(code, i * 8, i * 8 + 8));
@@ -41,7 +37,6 @@ public class InstructionParserTest {
     @Test
     public void iTypeTest() {
         int code = 0x00000793;
-        //10010011
         int address = 0x100f0;
         Instruction parsed = parse(code, address);
         assertEquals(address, parsed.getAddress());
@@ -49,7 +44,7 @@ public class InstructionParserTest {
         assertEquals("addi", parsed.getName());
         assertIterableEquals(List.of(15, 0), parsed.getRegisters());
         assertEquals(0, parsed.getImmediate());
-        assertEquals(null, parsed.getJumpAddress());
+        assertThrows(UnsupportedOperationException.class, parsed::getJumpAddress);
     }
 
     @Test
@@ -79,8 +74,8 @@ public class InstructionParserTest {
         assertEquals(code, parsed.getCode());
         assertEquals("add", parsed.getName());
         assertIterableEquals(List.of(15, 14, 15), parsed.getRegisters());
-        assertEquals(null, parsed.getImmediate());
-        assertEquals(null, parsed.getJumpAddress());
+        assertThrows(UnsupportedOperationException.class, parsed::getImmediate);
+        assertThrows(UnsupportedOperationException.class, parsed::getJumpAddress);
     }
 
     @Test
@@ -93,7 +88,7 @@ public class InstructionParserTest {
         assertEquals("sb", parsed.getName());
         assertIterableEquals(List.of(3, 15), parsed.getRegisters());
         assertEquals(-972, parsed.getImmediate());
-        assertEquals(null, parsed.getJumpAddress());
+        assertThrows(UnsupportedOperationException.class, parsed::getJumpAddress);
     }
 
     @Test
@@ -106,7 +101,7 @@ public class InstructionParserTest {
         assertEquals("lui", parsed.getName());
         assertIterableEquals(List.of(10), parsed.getRegisters());
         assertEquals(0x11, parsed.getImmediate());
-        assertEquals(null, parsed.getJumpAddress());
+        assertThrows(UnsupportedOperationException.class, parsed::getJumpAddress);
     }
 
 }

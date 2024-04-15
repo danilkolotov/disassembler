@@ -4,7 +4,6 @@ import disassembler.elf.Table;
 import disassembler.elf.TableStructure;
 import disassembler.isa.Instruction;
 import disassembler.riscv.RISCParser;
-import disassembler.riscv.rv32i.IParser;
 import disassembler.util.ByteIterator;
 import disassembler.util.IntUtils;
 import disassembler.util.Pair;
@@ -12,7 +11,7 @@ import disassembler.util.Pair;
 import java.util.*;
 
 public class ELFParser {
-    private byte[] bytes;
+    private final byte[] bytes;
 
     private int nameOffset;
 
@@ -60,7 +59,6 @@ public class ELFParser {
         List<String> sectionNames = new ArrayList<>();
         for (int i = 0; i < header.get("e_shnum"); i++) {
             sectionNames.add(parseName(nameSectionOffset + sectionHeaderTable.get(i).get("sh_name")));
-//            sectionNames.add(parseName(new ByteIterator(bytes, nameSectionOffset + sectionHeaderTable.get(i).get("sh_name"))));
         }
 
         int stringTableIndex = sectionNames.indexOf(".strtab");
@@ -82,28 +80,24 @@ public class ELFParser {
 
         Table<Integer> textHeader = sectionHeaderTable.get(sectionNames.indexOf(".text"));
 
-//        List<Instruction> instructions = new IParser().parse(
-//                new ByteIterator(bytes, textHeader.get("sh_offset"), textHeader.get("sh_size")),
-//                textHeader.get("sh_addr")
-//        );
-
         List<Instruction> instructions = RISCParser.parse(
                 new ByteIterator(bytes, textHeader.get("sh_offset"), textHeader.get("sh_size")),
                 textHeader.get("sh_addr")
         );
 
         Map<Integer, String> addressToLabel = new HashMap<>();
-
         for (Table<Integer> symbolTableEntry : symbolTable) {
             addressToLabel.put(symbolTableEntry.get("st_value"), getName(symbolTableEntry.get("st_name")));
         }
 
         int labelCount = 0;
         for (Instruction instruction : instructions) {
-            Integer jump = instruction.getJumpAddress();
-            if (jump != null && !addressToLabel.containsKey(jump)) {
-                addressToLabel.put(jump, "L" + labelCount++);
-            }
+            try {
+                Integer jump = instruction.getJumpAddress();
+                if (!addressToLabel.containsKey(jump)) {
+                    addressToLabel.put(jump, "L" + labelCount++);
+                }
+            } catch (UnsupportedOperationException ignored) {}
         }
 
         List<Pair<String, Table<Integer>>> symbols = new ArrayList<>();
@@ -115,13 +109,11 @@ public class ELFParser {
     }
 
     private String parseName(int offset) {
-//    private String parseName(ByteIterator iterator) {
         ByteIterator iterator = new ByteIterator(bytes, offset);
         StringBuilder result = new StringBuilder();
-        char cc = (char) (byte) iterator.next(1).get(0);
-        while (cc != 0) {
-            result.append(cc);
-            cc = (char) (byte) iterator.next(1).get(0);
+        char current;
+        while ((current = (char) (byte) iterator.next(1).get(0)) != 0) {
+            result.append(current);
         }
         return result.toString();
     }

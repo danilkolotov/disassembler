@@ -8,7 +8,6 @@ import disassembler.util.Pair;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static disassembler.util.IntUtils.getBits;
 
@@ -25,14 +24,12 @@ public class Output {
         }
 
         result.append("\n\n.symtab\n\n");
-        result.append(temporary(symbols));
+        result.append(symbolTableOutput(symbols));
         return result.toString();
     }
 
     private static String instructionToString(Instruction instruction, Map<Integer, String> labels) {
         String name = instruction.getName();
-        List<String> registers = Optional.ofNullable(instruction.getRegisters()).map(l -> l.stream().map(Output::registerOutput).toList()).orElse(null);
-        Integer immediate = instruction.getImmediate();
         int address = instruction.getAddress();
         int code = instruction.getCode();
 
@@ -42,8 +39,8 @@ public class Output {
             case BType b -> String.format(
                     "%7s\t%s, %s, 0x%x, <%s>",
                     name,
-                    registers.get(0),
-                    registers.get(1),
+                    registerOutput(b.getRegisters().get(0)),
+                    registerOutput(b.getRegisters().get(1)),
                     b.getJumpAddress(),
                     labels.get(b.getJumpAddress())
                 );
@@ -51,41 +48,29 @@ public class Output {
             case IType i -> (!load.contains(name) ? String.format(
                     "%7s\t%s, %s, %s",
                     name,
-                    registers.get(0),
-                    registers.get(1),
-                    immediate
-            ) : String.format(
-                    "%7s\t%s, %d(%s)",
-                    name,
-                    registers.get(0),
-                    immediate,
-                    registers.get(1)
-            ));
+                    registerOutput(i.getRegisters().get(0)),
+                    registerOutput(i.getRegisters().get(1)),
+                    i.getImmediate()
+            ) : lsOutput(name, i.getRegisters().get(0), i.getRegisters().get(1), i.getImmediate()));
             case JType j -> String.format(
                     "%7s\t%s, 0x%x <%s>",
                     name,
-                    registers.get(0),
+                    registerOutput(j.getRegisters().get(0)),
                     j.getJumpAddress(),
                     labels.get(j.getJumpAddress())
             );
             case RType r  -> String.format(
                     "%7s\t%s, %s, %s",
                     name,
-                    registers.get(0),
-                    registers.get(1),
-                    registers.get(2)
+                    registerOutput(r.getRegisters().get(0)),
+                    registerOutput(r.getRegisters().get(1)),
+                    registerOutput(r.getRegisters().get(2))
             );
-            case SType s -> String.format(
-                    "%7s\t%s, %d(%s)",
-                    name,
-                    registers.get(1),
-                    immediate,
-                    registers.get(0)
-            );
+            case SType s -> lsOutput(name, s.getRegisters().get(1), s.getRegisters().get(0), s.getImmediate());
             case UType u -> String.format(
                     "%7s\t%s, 0x%s",
                     name,
-                    registers.get(0),
+                    registerOutput(u.getRegisters().get(0)),
                     Integer.toHexString(u.getImmediate())
             );
             case EType e -> String.format("%7s", name);
@@ -99,7 +84,17 @@ public class Output {
         };
     }
 
-    private static String temporary(List<Pair<String, Table<Integer>>> table) {
+    private static String lsOutput(String name, int r1, int r2, int immediate) {
+        return String.format(
+                "%7s\t%s, %d(%s)",
+                name,
+                registerOutput(r1),
+                immediate,
+                registerOutput(r2)
+        );
+    }
+
+    private static String symbolTableOutput(List<Pair<String, Table<Integer>>> table) {
         Map<Integer, String> types = new HashMap<>();
         types.put(0, "NOTYPE");
         types.put(1, "OBJECT");

@@ -3,7 +3,6 @@ package disassembler;
 import disassembler.elf.Table;
 import disassembler.elf.TableStructure;
 import disassembler.util.ByteIterator;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,16 +11,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ComplexTableTest {
-    private static List<Byte> testList;
+    private static final List<Byte> testList;
 
-    @BeforeAll
-    public static void setTestList() {
+    static {
         testList = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             testList.add((byte) i);
         }
-    }
 
+    }
     @Test
     public void table2DTest() {
         TableStructure<Integer> entry =

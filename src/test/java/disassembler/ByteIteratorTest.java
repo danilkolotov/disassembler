@@ -10,10 +10,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ByteIteratorTest {
-    private static List<Byte> testList;
+    private static final List<Byte> testList;
 
-    @BeforeAll
-    public static void setList() {
+    static {
         testList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             testList.add((byte) i);
