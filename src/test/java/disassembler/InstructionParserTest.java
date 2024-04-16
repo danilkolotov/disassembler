@@ -11,6 +11,8 @@ import java.util.List;
 import static disassembler.util.IntUtils.getBits;
 import static org.junit.jupiter.api.Assertions.*;
 
+// just a few tests
+// other tests in ParserTest
 public class InstructionParserTest {
     private static Instruction parse(int code, int address) {
         List<Byte> bytes = new ArrayList<>();

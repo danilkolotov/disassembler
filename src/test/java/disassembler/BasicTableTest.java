@@ -92,7 +92,7 @@ public class BasicTableTest {
     }
 
     @Test
-    public void testData() {
+    public void testNotEnoughData() {
         List<Byte> testList = Collections.nCopies(5, (byte) 1);
         ByteIterator iterator = new ByteIterator(testList, 0);
         TableStructure<Byte> builder = new TableStructure<>(list -> list.get(0))
@@ -101,7 +101,7 @@ public class BasicTableTest {
     }
 
     @Test
-    public void testName() {
+    public void testDuplicateNames() {
         List<Byte> testList = Collections.nCopies(5, (byte) 1);
         ByteIterator iterator = new ByteIterator(testList, 0);
         TableStructure<Byte> builder = new TableStructure<>(list -> list.get(0))
