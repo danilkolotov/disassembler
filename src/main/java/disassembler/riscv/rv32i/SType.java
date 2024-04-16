@@ -21,7 +21,7 @@ public final class SType extends Instruction {
             case 0b000 -> "sb";
             case 0b001 -> "sh";
             case 0b010 -> "sw";
-            default -> throw new IllegalArgumentException("Illegal funct3, code: 0x" + Integer.toHexString(representation));
+            default -> throw error();
         };
     }
 

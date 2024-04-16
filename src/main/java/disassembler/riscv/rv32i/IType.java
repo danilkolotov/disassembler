@@ -30,9 +30,9 @@ public final class IType extends Instruction {
                 case 0b101 -> switch (funct7){
                     case 0b0000000 -> "srli";
                     case 0b0100000 -> "srai";
-                    default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+                    default -> throw error();
                 };
-                default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+                default -> throw error();
             };
         }
         if (opcode == 0b0000011) {
@@ -42,7 +42,7 @@ public final class IType extends Instruction {
                 case 0b010 -> "lw";
                 case 0b100 -> "lbu";
                 case 0b101 -> "lhu";
-                default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+                default -> throw error();
             };
         }
         if (opcode == 0b1100111) {
@@ -50,7 +50,7 @@ public final class IType extends Instruction {
                 return "jalr";
             }
         }
-        throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+        throw error();
     }
 
     @Override

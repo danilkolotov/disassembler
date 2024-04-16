@@ -65,4 +65,8 @@ public abstract class Instruction {
         }
         return field;
     }
+
+    protected IllegalArgumentException error() {
+        return new IllegalArgumentException("Illegal instruction representation: 0b" + Integer.toBinaryString(representation));
+    }
 }

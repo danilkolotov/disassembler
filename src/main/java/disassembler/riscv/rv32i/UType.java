@@ -19,7 +19,7 @@ public final class UType extends Instruction {
         return switch (opcode) {
             case 0b0110111 -> "lui";
             case 0b0010111 -> "auipc";
-            default -> throw new IllegalArgumentException("Illegal funct3, code: 0x" + Integer.toHexString(representation));
+            default -> throw error();
         };
     }
 

@@ -22,7 +22,7 @@ public final class BType extends Instruction {
             case 0b101 -> "bge";
             case 0b110 -> "bltu";
             case 0b111 -> "bgeu";
-            default -> throw new IllegalArgumentException("Incorrect funct3 for B-type instruction: " + funct3);
+            default -> throw error();
         };
     }
 

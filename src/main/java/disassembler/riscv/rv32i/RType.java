@@ -18,13 +18,13 @@ public class RType extends Instruction {
         int funct3 = getBits(representation, 12, 15);
         int funct7 = getBits(representation, 25, 32);
         if (funct7 != 0b0000000 && funct7 != 0b0100000) {
-            throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+            throw error();
         }
         return switch (funct3) {
             case 0b000 -> switch (funct7) {
                 case 0b0000000 -> "add";
                 case 0b0100000 -> "sub";
-                default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+                default -> throw error();
             };
             case 0b001 -> "sll";
             case 0b010 -> "slt";
@@ -33,11 +33,11 @@ public class RType extends Instruction {
             case 0b101 -> switch (funct7) {
                 case 0b0000000 -> "srl";
                 case 0b0100000 -> "sra";
-                default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+                default -> throw error();
             };
             case 0b110 -> "or";
             case 0b111 -> "and";
-            default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+            default -> throw error();
         };
     }
     @Override

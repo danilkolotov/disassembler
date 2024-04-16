@@ -21,7 +21,7 @@ public class RType extends disassembler.riscv.rv32i.RType {
             case 0b101 -> "divu";
             case 0b110 -> "rem";
             case 0b111 -> "remu";
-            default -> throw new IllegalArgumentException("Illegal funct3 & funct7 combination, code: 0x" + Integer.toHexString(representation));
+            default -> throw error();
         };
     }
 }
