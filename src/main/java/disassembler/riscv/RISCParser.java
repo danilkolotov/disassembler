@@ -12,11 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class RISCParser {
-    private static final List<InstructionParser> parsers = List.of(
-        new IParser(),
-        new MParser()
-    );
-    public static List<Instruction> parse(ByteIterator iterator, int address) {
+    public static List<Instruction> parse(ByteIterator iterator, int address, List<InstructionParser> parsers) {
         List<Instruction> result = new ArrayList<>();
         while (iterator.hasNext(4)) {
             List<Byte> current = iterator.next(4);

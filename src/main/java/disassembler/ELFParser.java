@@ -3,6 +3,7 @@ package disassembler;
 import disassembler.elf.Table;
 import disassembler.elf.TableStructure;
 import disassembler.isa.Instruction;
+import disassembler.isa.InstructionParser;
 import disassembler.riscv.RISCParser;
 import disassembler.util.ByteIterator;
 import disassembler.util.IntUtils;
@@ -19,7 +20,7 @@ public class ELFParser {
         this.bytes = bytes;
     }
 
-    public String parse() {
+    public String parse(List<InstructionParser> parsers) {
         Table<Integer> header = new TableStructure<>(IntUtils::LEToInt)
                 .entry(16, "e_ident")
                 .entry(2, "e_type")
@@ -82,7 +83,8 @@ public class ELFParser {
 
         List<Instruction> instructions = RISCParser.parse(
                 new ByteIterator(bytes, textHeader.get("sh_offset"), textHeader.get("sh_size")),
-                textHeader.get("sh_addr")
+                textHeader.get("sh_addr"),
+                parsers
         );
 
         Map<Integer, String> addressToLabel = new HashMap<>();
