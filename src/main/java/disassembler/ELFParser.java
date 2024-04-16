@@ -111,9 +111,9 @@ public class ELFParser {
     private String parseName(int offset) {
         ByteIterator iterator = new ByteIterator(bytes, offset);
         StringBuilder result = new StringBuilder();
-        char current;
-        while ((current = (char) (byte) iterator.next(1).get(0)) != 0) {
-            result.append(current);
+        Byte current;
+        while ((current = iterator.next(1).get(0)) != 0) {
+            result.append((char) (byte) current);
         }
         return result.toString();
     }
